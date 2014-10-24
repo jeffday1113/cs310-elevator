@@ -2,33 +2,36 @@ package lab3;
 
 public class EventBarrier extends AbstractEventBarrier{
 	private int count = 0;
-	private boolean var = true;
+	private boolean state;
 	public EventBarrier() {
-		var = false;
+		state = false; //keep the state of the current progress
 		count = 0;
 	}
 	
 	@Override
 	public synchronized void arrive() {
+		System.out.println("Thread: " + Thread.currentThread().getId() + " arrived at event barrier");
 		count++;
-		while(!var){
+		state = !(count==0);
+		while(!state){ //loop before leaping
 			try {
-				
-			wait();
+				System.out.println(count);
+				System.out.println("Thread: " + Thread.currentThread().getId() + " waiting?");
+			this.wait();
 				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	@Override
 	public synchronized void raise() {
-		var = !(count==0);		
-		while(var){
+		System.out.println("Thread: " + Thread.currentThread().getId() + " is being raised");
+		state = !(count==0);		
+		while(state){ //loop before leaping
 			notifyAll();
 			try {
-				wait();
+				this.wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -37,13 +40,15 @@ public class EventBarrier extends AbstractEventBarrier{
 
 	@Override
 	public synchronized void complete() {
-		count--;
-		var = !(count==0);
+		System.out.println("Thread: " + Thread.currentThread().getId() + " has been completed");
+		count--; //decrement from the waiters
+		state = !(count==0);
 		notifyAll();
 	}
 
 	@Override
 	public int waiters() {
+		System.out.println("# of waiting threads is: " + count);
 		return count;
 	}
 

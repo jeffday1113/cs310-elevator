@@ -12,6 +12,7 @@ public class Elevator extends AbstractElevator {
 		// TODO Auto-generated method stub
 		//raise();
 		//then close doors
+		//
 	}
 
 	@Override

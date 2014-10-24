@@ -11,6 +11,7 @@ public class Main {
 	    } else // known just one arg
 	       if(args[1].equals("p1")){
 	          // call the EventBarrier"
+	    	  
 	       }
 	       if(args[1].equals("p2part1")) {
 	           // call the elevator part1
