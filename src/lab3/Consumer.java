@@ -1,16 +1,16 @@
 package lab3;
 
-public class EventBarrierRunnable implements Runnable{
+public class Consumer implements Runnable{
 	private EventBarrier myEventBarrier;
 
-	public EventBarrierRunnable(EventBarrier eb){
+	public Consumer(EventBarrier eb){
 		myEventBarrier = eb;
 	}	
 	public void run() {
 
 		myEventBarrier.arrive();
 
-		myEventBarrier.raise();
+		//myEventBarrier.raise();
 
 		myEventBarrier.complete(); //Not sure about this complete
 

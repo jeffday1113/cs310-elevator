@@ -2,9 +2,9 @@ package lab3;
 
 public class EventBarrier extends AbstractEventBarrier{
 	private int count = 0;
-	private boolean state;
+	private boolean isInSignaledState;
 	public EventBarrier() {
-		state = false; //keep the state of the current progress
+		isInSignaledState = false; //keep the state of the current progress
 		count = 0;
 	}
 	
@@ -12,13 +12,15 @@ public class EventBarrier extends AbstractEventBarrier{
 	public synchronized void arrive() {
 		System.out.println("Thread: " + Thread.currentThread().getId() + " arrived at event barrier");
 		count++;
-		state = !(count==0);
-		while(!state){ //loop before leaping
+		if(isInSignaledState){
+			System.out.println("uhi");
+			return;
+		}
+		while(!isInSignaledState){ //loop before leaping
 			try {
 				System.out.println(count);
 				System.out.println("Thread: " + Thread.currentThread().getId() + " waiting?");
-			this.wait();
-				
+				this.wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -26,24 +28,33 @@ public class EventBarrier extends AbstractEventBarrier{
 	}
 	@Override
 	public synchronized void raise() {
-		System.out.println("Thread: " + Thread.currentThread().getId() + " is being raised");
-		state = !(count==0);		
-		while(state){ //loop before leaping
-			notifyAll();
+		isInSignaledState = true;	
+		notifyAll();
+		while(isInSignaledState){ //loop before leaping
 			try {
 				this.wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			isInSignaledState = count>0;
 		}
+		notifyAll();
 	}
 
 	@Override
 	public synchronized void complete() {
 		System.out.println("Thread: " + Thread.currentThread().getId() + " has been completed");
 		count--; //decrement from the waiters
-		state = !(count==0);
+		isInSignaledState = !(count==0);
 		notifyAll();
+		while(isInSignaledState){
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
 	}
 
 	@Override
