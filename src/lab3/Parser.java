@@ -9,7 +9,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 
-public class ScanInput {
+public class Parser {
+	private static int floors;
+	private static int elevators;
+	private static int riders;
+	private static int capacity;
+
 	public static void open() {
 		JFileChooser inputChooser = new JFileChooser(".");
 		int retval = JFileChooser.ERROR_OPTION;
@@ -29,48 +34,21 @@ public class ScanInput {
 		}
 	}
 
-	/**
-	 * This builds a building, elevator, and riders according
-	 * to the specs in the README.OUTPUTFORMAT. For information
-	 * about the input format and assumptions made see the
-	 * implementation details in the README under the 
-	 * ElevatorFactory section.
-	 * @param s Scanner linked to the input file
-	 * @return
-	 */
 	public static void build(Scanner s) {
 		String[] parameters = s.nextLine().split(" ");
-		int floors = Integer.parseInt(parameters[0]);
-		int elevators = Integer.parseInt(parameters[1]);
-		int riders = Integer.parseInt(parameters[2]);
-		int capacity;
-		if(parameters[3].equals("i"))
-		{
-			capacity = Integer.MAX_VALUE;
-		}
-		else
-		{
-			capacity = Integer.parseInt(parameters[3]);
-		}
+		floors = Integer.parseInt(parameters[0]);
+		elevators = Integer.parseInt(parameters[1]);
+		riders = Integer.parseInt(parameters[2]);
+		capacity = Integer.parseInt(parameters[3]);
+
 		Building sb = new Building(floors, elevators);
 		List<Rider> myRiders = new ArrayList<Rider>();
 		List<Elevator> myElevators = new ArrayList<Elevator>();
-		
-		if(elevators == 1 && capacity == Integer.MAX_VALUE)
-		{
-			Main.writer.println("Single Unbounded Elevator: ");
-		}
-		else if(elevators == 1)
-		{
-			Main.writer.println("Single Bounded Elevator: ");
-		}
-		else
-		{
-			Main.writer.println("Multiple Bounded Elevators");
-		}
-		
+
+
 		for(int i = 0; i < elevators; i++) {
-		//	myElevators.add(new Elevator(sb));
+			myElevators.add(new Elevator(floors, i,capacity));
+			System.out.println("Elevators making");
 		}
 		while(s.hasNextLine()) {
 			String[] query = s.nextLine().split(" ");
@@ -81,10 +59,12 @@ public class ScanInput {
 			myRiders.add(r);
 		}
 		for(int i = 0; i<myRiders.size(); i++){
+			System.out.println("Riders making");
 			myRiders.get(i).start();
 		}
 		for(int i = 0; i < elevators; i++) {
-			//myElevators.get(i).start();
+			System.out.println("Enter elevator");
+			myElevators.get(i).Enter();
 		}
 	}
 

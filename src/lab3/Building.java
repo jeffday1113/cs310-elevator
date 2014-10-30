@@ -13,7 +13,7 @@ public class Building extends AbstractBuilding{
 			ridersList[i] = new EventBarrier();
 			
 		}
-		elevator = new Elevator(numFloors,0, 1);
+		elevator = new Elevator(numFloors,1, 4);
 		// TODO Auto-generated constructor stub
 		//construct elevator with numFloors, elevatorId, maxOccupancyThreshold
 	}
@@ -26,7 +26,7 @@ public class Building extends AbstractBuilding{
 		//arrive
 		EventBarrier eb = ridersList[fromFloor-1];
 		elevator.RequestFloor(fromFloor);
-		//System.out.println("Rider has called for the elevator from floor " + fromFloor);
+		Main.writer.println("R ? " + " pushes U" + fromFloor);
 		eb.arrive();
 		
 		return elevator;
@@ -36,7 +36,7 @@ public class Building extends AbstractBuilding{
 	public AbstractElevator CallDown(int fromFloor) {
 		EventBarrier eb = ridersList[fromFloor-1];
 		elevator.RequestFloor(fromFloor);
-		System.out.println("Rider has called for the elevator from floor " + fromFloor);
+		Main.writer.println("R ? " + " pushes D" + fromFloor);
 		eb.arrive();
 		return elevator;
 	}
