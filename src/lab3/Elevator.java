@@ -12,7 +12,7 @@ public class Elevator extends AbstractElevator {
 		// TODO Auto-generated method stub
 		//raise();
 		//then close doors
-		//
+		ClosedDoors();
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class Elevator extends AbstractElevator {
 	@Override
 	public void VisitFloor(int floor) {
 		// TODO Auto-generated method stub
-		//open doors()
+		OpenDoors();
 	}
 
 	@Override

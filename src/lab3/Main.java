@@ -1,25 +1,44 @@
 package lab3;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 public class Main {
 	
-	public static void main(String[] args)
-	{
-	    if(args.length == 0) {
-	        // No options specified; make the default as the part 3 elevator submission
-	    } else if(args.length > 2) {
-	        // Throw an error--too many args
-	    } else // known just one arg
-	       if(args[1].equals("p1")){
-	          // call the EventBarrier"
-	    	  
-	       }
-	       if(args[1].equals("p2part1")) {
-	           // call the elevator part1
-	       } else if(args[1].equals("p2part2")) {
-	           // call the elevator part2
-	       } else if(args[1].equals("p2part3")) {
-	           // call the elevator part3
 
-	   }
+	public static PrintWriter writer = null;
+	
+	public static void main(String[] args) {
+		
+		try {
+			writer = new PrintWriter("Elevator.log", "UTF-8");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(args.length==0) {
+			ScanInput.open();
+			//System.out.println("Not enough arguments");
+			//writer.println("Not enough Arguments");
+		} 
+		else if(args.length > 1) {
+			System.out.println("Too many arguments");
+			writer.println("Too many arguments");
+		} 
+		else if(args[0].equals("p1")) //Test cases for Event Barrier are "hard baked" into test class
+		{
+			System.out.println("Event Barrier:");
+			writer.println("Event Barrier:");
+			new EventBarrierTestMain();
+		}
+		else if(args[0].equals("p2")){ //ElevatorFactory prompts for input file and figures out what type of elevator to
+										// create from there.
+			ScanInput.open();
+		}
+		writer.close();
 	}
 }

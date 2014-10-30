@@ -1,7 +1,10 @@
 package lab3;
 
 public class EventBarrierTestMain {
-
+	public EventBarrierTestMain(){
+		String[] args = null;
+		main(args);
+	}
 	public static void main(String[] args) {
 		
 		EventBarrierRunnable j = new EventBarrierRunnable(new EventBarrier());
