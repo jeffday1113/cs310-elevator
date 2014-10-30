@@ -1,6 +1,6 @@
 package lab3;
 
-public class Rider extends Thread implements Runnable{
+public class Rider extends Thread{
  /*This should be a thread for each rider who calls the elevator
   * 
   */
@@ -18,14 +18,21 @@ public class Rider extends Thread implements Runnable{
 	public void run() {
 		AbstractElevator myElevator;
 		if(requestedFloor > originFloor) { 
+			Main.writer.write((Thread.currentThread().getName() + "R" + id +
+	                "pushes D" + originFloor));
 			myElevator = myBuilding.CallUp(originFloor);
+			
 		} else {
+			Main.writer.write((Thread.currentThread().getName() + "R" + id +
+	                "pushes D" + originFloor));
 			myElevator = myBuilding.CallDown(originFloor);
+			
 		}
 		myElevator.Enter();
+		
 		myElevator.RequestFloor(requestedFloor);
 		myElevator.Exit();
-
+	
 	}
 	
 }

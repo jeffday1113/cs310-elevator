@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 public class Main {
 	
 
-	public static PrintWriter writer;
+	public static  PrintWriter writer ;
 	
 	public static void main(String[] args) {
 		
@@ -22,8 +22,6 @@ public class Main {
 		
 		if(args.length==0) {
 			Parser.open();
-			//System.out.println("Not enough arguments");
-			//writer.println("Not enough Arguments");
 		} 
 		else if(args.length > 1) {
 			writer.println("Too many arguments");
@@ -31,9 +29,9 @@ public class Main {
 		else if(args[0].equals("p1")) //Test cases for Event Barrier are "hard baked" into test class
 		{
 			writer.println("Event Barrier:");
-			new EventBarrierTestMain();
 		}
 		else if(args[0].equals("p2")){ 
+		
 			Parser.open();
 		}
 		writer.close();

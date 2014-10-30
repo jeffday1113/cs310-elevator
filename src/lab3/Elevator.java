@@ -1,66 +1,92 @@
 package lab3;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Elevator extends AbstractElevator {
 	private int current; 
-	private List<Rider> riderList;
+	EventBarrier[] iridersList;
+	EventBarrier[] oridersList;
+	
+	private EventBarrier currEntryBarrier;
+
+	ArrayList<Rider> Ordered_Outside_RequestList;
+	static final int UP=0;
+	static final int DOWN = 1;
+	static int NOT_MOVING = 2;
+	int direction = UP;
 
 	public Elevator(int numFloors, int elevatorId, int maxOccupancyThreshold) {
 		super(numFloors, elevatorId, maxOccupancyThreshold);
 
-		riderList = new ArrayList<Rider>();
+		iridersList = new EventBarrier[numFloors];
+		oridersList = new EventBarrier[numFloors];
+
+		for(int i=0; i< numFloors; i++){
+			iridersList[i] = new EventBarrier();
+			oridersList[i] = new EventBarrier();
+		}
 	}
 
 	@Override
 	public void OpenDoors() {
+		System.out.println("opening doors");
 		Main.writer.println("E ?" + "on F" +"?"+ "opens");
-		//raise();
-		//then close doors
+		 oridersList[current].raise();  //exit barrier
+         currEntryBarrier.raise();
 		ClosedDoors();
 	}
 
 	@Override
 	public void ClosedDoors() {
 		Main.writer.println("E ?" + "on F" +"?"+ "closes");
-		//get next request either from outside or inside
+		
+		//get next rider
 	}
 
 	@Override
 	public void VisitFloor(int floor) {
 		if(current<floor){
-			Main.writer.println("E " +"?" + "moves up to floor" + (floor+1));
+			System.out.println("visiting floor " + floor );
+			Main.writer.println("E " +"?" + "moves up to floor" + (floor));
+			currEntryBarrier = iridersList[current];
 		}
 		if(current > floor){
-			Main.writer.println("E " +"?" + "moves down to floor" + (floor+1));
+			System.out.println("visiting floor " + floor );
+			currEntryBarrier = oridersList[current];
+			Main.writer.println("E " +"?" + "moves down to floor" + (floor));
 		}
 		current = floor;
 		OpenDoors();
 	}
 
 	@Override
-	public boolean Enter() {
+	public synchronized boolean Enter() {
+		if(current >0){
+		currEntryBarrier.complete();
 		return true;
+		}else{
+		return false;
+		}
 	}
 
 	@Override
 	public void Exit() {
+		System.out.println("Exit");
 		Thread riderThread = Thread.currentThread();
 		Rider rider = (Rider) riderThread;
 		if(current == rider.requestedFloor-1){
 			Main.writer.println("R" +rider.id + "exits E" +"?" + "on F"+ current);
-			//complete
-			riderList.remove(rider);
+			oridersList[current].complete();
 		}
 
 	}
 
 	@Override
 	public void RequestFloor(int floor) {
-		// TODO Auto-generated method stub
-		// the rider arrive at the floor, call arrive
-
+		System.out.println("Requesting from floor " + (floor));
+		oridersList[floor-1].arrive();
+		
 	}
 
 }

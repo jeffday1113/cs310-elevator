@@ -47,8 +47,8 @@ public class Parser {
 
 
 		for(int i = 0; i < elevators; i++) {
+			Main.writer.write("Clive:");
 			myElevators.add(new Elevator(floors, i,capacity));
-			System.out.println("Elevators making");
 		}
 		while(s.hasNextLine()) {
 			String[] query = s.nextLine().split(" ");
@@ -59,11 +59,9 @@ public class Parser {
 			myRiders.add(r);
 		}
 		for(int i = 0; i<myRiders.size(); i++){
-			System.out.println("Riders making");
 			myRiders.get(i).start();
 		}
-		for(int i = 0; i < elevators; i++) {
-			System.out.println("Enter elevator");
+		for(int i = 0; i < elevators; i++) {	
 			myElevators.get(i).Enter();
 		}
 	}
