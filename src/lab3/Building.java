@@ -2,30 +2,30 @@ package lab3;
 
 public class Building extends AbstractBuilding{
 	public Elevator elevator;
-	private EventBarrier[] iridersList;  //inside requests
-
+	private EventBarrier[] upCalls; 
+	private EventBarrier[] downCalls; 
+	
 	public Building(int numFloors, int numElevators) {
 		super(numFloors, numElevators);
-		iridersList = new EventBarrier[numFloors];
+		
+		upCalls = new EventBarrier[numFloors];
+		downCalls = new EventBarrier[numFloors];
 		for(int i=0; i< numFloors; i++){
-			iridersList[i] = new EventBarrier();
+			upCalls[i] = new EventBarrier();
+			downCalls[i] = new EventBarrier();
 		}
-		elevator = new Elevator(numFloors,0, 400);
+		elevator = new Elevator(numFloors,0, 400, upCalls, downCalls);
 	}
 
 	@Override
 	public AbstractElevator CallUp(int fromFloor) {
-		System.out.println("Am calling up");
-		//elevator.RequestFloor(fromFloor);		
-		iridersList[fromFloor-1].arrive();		
+		upCalls[fromFloor-1].arrive();
 		return elevator;
 	}
 
 	@Override
 	public AbstractElevator CallDown(int fromFloor) {
-		System.out.println("Am calling down");
-	//	elevator.RequestFloor(fromFloor);
-		iridersList[fromFloor-1].arrive();
+		downCalls[fromFloor-1].arrive();
 		return elevator;
 	}
 

@@ -12,7 +12,9 @@ import javax.swing.JOptionPane;
 public class Parser {
 	private static int floors;
 	private static int elevators;
+	@SuppressWarnings("unused")
 	private static int riders;
+	@SuppressWarnings("unused")
 	private static int capacity;
 
 	public static void open() {
@@ -43,13 +45,7 @@ public class Parser {
 
 		Building sb = new Building(floors, elevators);
 		List<Rider> myRiders = new ArrayList<Rider>();
-		List<Elevator> myElevators = new ArrayList<Elevator>();
 
-
-		for(int i = 0; i < elevators; i++) {
-			Main.writer.write("Clive:");
-			myElevators.add(new Elevator(floors, i,capacity));
-		}
 		while(s.hasNextLine()) {
 			String[] query = s.nextLine().split(" ");
 			int riderID = Integer.parseInt(query[0]);
@@ -61,9 +57,7 @@ public class Parser {
 		for(int i = 0; i<myRiders.size(); i++){
 			myRiders.get(i).start();
 		}
-		for(int i = 0; i < elevators; i++) {	
-			myElevators.get(i).Enter();
-		}
+
 	}
 
 }
