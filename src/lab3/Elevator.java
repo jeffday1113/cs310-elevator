@@ -2,36 +2,37 @@ package lab3;
 
 
 
-public class Elevator extends AbstractElevator {
+public class Elevator extends AbstractElevator  {
 	private int current; 
 	EventBarrier[] downCalls;
 	EventBarrier[] upCalls;
-	
+
 	private EventBarrier currEntryBarrier;
 
 
 
-	public Elevator(int numFloors, int elevatorId, int maxOccupancyThreshold, EventBarrier[] up, EventBarrier[] down) {
+	public Elevator(int numFloors, int elevatorId, int maxOccupancyThreshold) {
 		super(numFloors, elevatorId, maxOccupancyThreshold);
-
-		downCalls = down;
-		upCalls = up;
-
-		
+		upCalls = new EventBarrier[numFloors];
+		downCalls = new EventBarrier[numFloors];
+		for(int i=0; i< numFloors; i++){
+			upCalls[i] = new EventBarrier();
+			downCalls[i] = new EventBarrier();
+		}
 	}
 
 	@Override
 	public void OpenDoors() {
 		System.out.println("opening doors");
-		Main.writer.println("E ?" + "on F" +"?"+ "opens");
-         currEntryBarrier.raise();
+		Main.writer.println("E" + "?" + "on F" +"?"+ "opens");
+		currEntryBarrier.raise();
 		ClosedDoors();
 	}
 
 	@Override
 	public void ClosedDoors() {
 		Main.writer.println("E ?" + "on F" +"?"+ "closes");
-		
+
 		//get next rider
 	}
 
@@ -54,23 +55,25 @@ public class Elevator extends AbstractElevator {
 	@Override
 	public synchronized boolean Enter() {
 		if(current >0){
-		currEntryBarrier.complete();
-		return true;
+			currEntryBarrier.complete();
+			return true;
 		}else{
-		return false;
+			return false;
 		}
 	}
 
 	@Override
 	public void Exit() {	
-			upCalls[current].complete();
+		currEntryBarrier.complete();
 	}
 
 	@Override
 	public void RequestFloor(int floor) {
-		upCalls[floor-1].arrive();
 		System.out.println("Requesting from floor " + (floor));
+		downCalls[floor-1].arrive();
+		System.out.println(currEntryBarrier.waiters());
 		
 	}
 
+	
 }

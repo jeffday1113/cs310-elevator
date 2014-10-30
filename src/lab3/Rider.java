@@ -21,16 +21,18 @@ public class Rider extends Thread{
 		if(requestedFloor > originFloor) { 
 			Main.writer.println(("R" + id +
 					" pushes D" + originFloor));
+			System.out.println("about to call elevator");
 			myElevator = myBuilding.CallUp(originFloor);
-			
+			//we never get an elevator back
+			System.out.println("return an up elevator");
 
 		} else {
 			Main.writer.write("R" + id +
 					" pushes D" + originFloor);
 			myElevator = myBuilding.CallDown(originFloor);
-
+			System.out.println("return a down elevator");
 		}
-		System.out.println("Return an elevator");
+
 		myElevator.Enter();
 		myElevator.RequestFloor(requestedFloor);
 		myElevator.Exit();

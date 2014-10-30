@@ -44,8 +44,12 @@ public class Parser {
 		capacity = Integer.parseInt(parameters[3]);
 
 		Building sb = new Building(floors, elevators);
+		List<Elevator> myElevators = new ArrayList<Elevator>();
+		
 		List<Rider> myRiders = new ArrayList<Rider>();
-
+		for(int i = 0; i < elevators; i++) {
+			myElevators.add(new Elevator(floors, 0, elevators));
+		}
 		while(s.hasNextLine()) {
 			String[] query = s.nextLine().split(" ");
 			int riderID = Integer.parseInt(query[0]);
@@ -57,7 +61,10 @@ public class Parser {
 		for(int i = 0; i<myRiders.size(); i++){
 			myRiders.get(i).start();
 		}
-
+		
+		for(int i = 0; i < elevators; i++) {
+			 myElevators.get(i).Enter();
+		}
 	}
 
 }
