@@ -6,25 +6,33 @@ public class EventBarrierTestMain {
 		main(args);
 	}
 	public static void main(String[] args) {
-		
-		EventBarrierRunnable j = new EventBarrierRunnable(new EventBarrier());
-		EventBarrierRunnable k = new EventBarrierRunnable(new EventBarrier());
+		EventBarrier bar = new EventBarrier();
+		Consumer j = new Consumer(bar);
 		/*I put this loop in trying to test for multiple threads
 		 * help me in making this make sense
 		 */
+		Producer p = new Producer(bar);
 		for(int i = 0; i < 6; i++){  
 			Thread t = new Thread(j);
-			Thread x = new Thread(k);
-			
+		
 			if(i<=3){  //Here threads run concurrently
 				t.start();
-				x.start();
+				System.out.println(System.lineSeparator() + "printing i" + i);
 			}else{
-				x.start();  //single thread running
 
 			}
 				
 		}
+		System.out.println("linedradjrrkt");
+		//bar.raise();
+		try {
+			Thread.sleep(1);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		Thread e = new Thread(p);
+		e.start();
 		
 		
 	}
