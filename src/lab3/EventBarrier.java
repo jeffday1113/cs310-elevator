@@ -10,17 +10,17 @@ public class EventBarrier extends AbstractEventBarrier{
 	
 	@Override
 	public synchronized void arrive() {
-		System.out.println("Thread: " + Thread.currentThread().getId() + " arrived at event barrier");
+		//System.out.println("Thread: " + Thread.currentThread().getId() + " arrived at event barrier");
 		count++;
 		
 		if(isInSignaledState){
-			System.out.println("uhi");
+		//	System.out.println("uhi");
 			return;
 		}
 		while(!isInSignaledState){ //loop before leaping
 			try {
-				System.out.println(count);
-				System.out.println("Thread: " + Thread.currentThread().getId() + " waiting");
+			//	System.out.println(count);
+			//	System.out.println("Thread: " + Thread.currentThread().getId() + " waiting");
 				
 				wait();
 			} catch (InterruptedException e) {
@@ -30,7 +30,7 @@ public class EventBarrier extends AbstractEventBarrier{
 	}
 	@Override
 	public synchronized void raise() {
-		System.out.println("called raise");
+		//System.out.println("called raise");
 		isInSignaledState = true;	
 		notifyAll();
 		while(isInSignaledState){ //loop before leaping
@@ -46,7 +46,7 @@ public class EventBarrier extends AbstractEventBarrier{
 
 	@Override
 	public synchronized void complete() {
-		System.out.println("Thread: " + Thread.currentThread().getId() + " has been completed");
+		//System.out.println("Thread: " + Thread.currentThread().getId() + " has been completed");
 		count--; //decrement from the waiters
 		isInSignaledState = !(count==0);
 		notifyAll();
@@ -62,7 +62,7 @@ public class EventBarrier extends AbstractEventBarrier{
 
 	@Override
 	public int waiters() {
-		System.out.println("# of waiting threads is: " + count);
+		//System.out.println("# of waiting threads is: " + count);
 		return count;
 	}
 

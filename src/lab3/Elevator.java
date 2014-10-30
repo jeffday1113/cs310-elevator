@@ -2,11 +2,12 @@ package lab3;
 
 
 
-public class Elevator extends AbstractElevator  {
+public class Elevator extends AbstractElevator implements Runnable {
 	private int current; 
 	EventBarrier[] downCalls;
 	EventBarrier[] upCalls;
-
+	private boolean moreRiders;
+	private boolean goingUp;
 	private EventBarrier currEntryBarrier;
 
 
@@ -19,6 +20,9 @@ public class Elevator extends AbstractElevator  {
 			upCalls[i] = new EventBarrier();
 			downCalls[i] = new EventBarrier();
 		}
+		moreRiders = false;
+		current = 1;
+		goingUp = true;
 	}
 
 	@Override
@@ -72,6 +76,27 @@ public class Elevator extends AbstractElevator  {
 		System.out.println("Requesting from floor " + (floor));
 		downCalls[floor-1].arrive();
 		System.out.println(currEntryBarrier.waiters());
+		
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(moreRiders){
+			if(goingUp){
+				current++;
+				if(current == numFloors){
+					goingUp = false;
+				}
+			}
+			else{
+				current--;
+				if(current == 1){
+					goingUp = true;
+				}
+			}
+			VisitFloor(current);
+		}
 		
 	}
 
