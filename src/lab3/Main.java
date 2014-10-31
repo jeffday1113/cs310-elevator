@@ -37,7 +37,7 @@ public class Main {
 		writer.close();
 	}*/
 	public static void main(String args[]){
-		int floors = 2;
+		int floors = 10;
 		int elevators = 2;
 		Building b = new Building(floors, elevators);
 		Elevator e = new Elevator(floors, 0, 1);
@@ -64,8 +64,8 @@ public class Main {
 		e.setEventBarriers(upCalls, downCalls, elevatorCalls);
 		f.setEventBarriers(upCalls, downCalls, elevatorCalls);
 		
-		Rider r = new Rider(1, 0, 1, b);
-		Rider rr = new Rider(2, 1, 0, b);
+		Rider r = new Rider(1, 9, 3, b);
+		Rider rr = new Rider(2, 8, 0, b);
 		Thread hi = new Thread(e);
 		hi.start();
 		Thread hii = new Thread(f);

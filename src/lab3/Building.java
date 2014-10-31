@@ -13,7 +13,7 @@ public class Building extends AbstractBuilding{
 
 	public Building(int numFloors, int numElevators) {
 		super(numFloors, numElevators);
-		totalRiders = 1;
+		totalRiders = 2;
 		evs = new ArrayList<Elevator>();
 		//upCalls = new EventBarrier[numFloors];
 		//downCalls = new EventBarrier[numFloors];

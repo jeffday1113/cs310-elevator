@@ -69,7 +69,7 @@ public class Elevator extends AbstractElevator implements Runnable {
 			//	Main.writer.println("E " +"?" + "moves down to floor" + (floor));
 		}
 		current = floor;
-		if(currEntryBarrier.waiters() > 0 || current == floorGoingTo){
+		if((currEntryBarrier.waiters() > 0 && !currEntryBarrier.isInSignaledState) || current == floorGoingTo){
 			OpenDoors();
 			ClosedDoors();
 		}

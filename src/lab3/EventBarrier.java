@@ -2,7 +2,7 @@ package lab3;
 
 public class EventBarrier extends AbstractEventBarrier{
 	private int count = 0;
-	private boolean isInSignaledState;
+	public boolean isInSignaledState;
 	public EventBarrier() {
 		isInSignaledState = false; //keep the state of the current progress
 		count = 0;
