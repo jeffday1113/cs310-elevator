@@ -6,17 +6,17 @@
  * Team Info & Time spent
  *************************/
 
-	Name1: Clive Mudanda 	// Edit this accordingly
-	NetId1: cmm85	 	// Edit
-	Time spent: 10 hours 	// Edit 
+	Name1: Clive Mudanda 	
+	NetId1: cmm85
+	Time spent: 10 hours
 
-	Name2:Jeff Day	// Edit this accordingly
-	NetId2: fn	 	// Edit
-	Time spent: 10 hours 	// Edit 
+	Name2:Jeff Day
+	NetId2: jrd22
+	Time spent: 10 hours 
 
-	Name3: Andrew Gauthier	// Edit this accordingly
-	NetId3: fn	 	// Edit
-	Time spent: 10 hours 	// Edit 
+	Name3: Andrew Gauthier
+	NetId3: ajg45
+	Time spent: 10 hours
 
 /******************
  * Files to submit
@@ -52,6 +52,86 @@
  * details to maximize your partial credit.  
  * */
 
+ There were two primary aspects of this lab: creating the EventBarrier class and 
+ using that EventBarrier class to implement a functioning simulator of an Elevator 
+ system in a building.  Throughout the lab, Clive, Jeff, and Andrew all 
+ collaborated relatively equally on all aspects of it (e.g. Clive started the 
+ EventBarrier, Andrew and Jeff debugged and finished it.  Clive started the 
+ elevator framework, Andrew and Jeff helped to debug and implement new features 
+ etc.)
+ 
+ In developing the EventBarrier class, we utilized the comparison of the 
+ EventBarrier system to that of a drawbridge as mentioned in the PDF.  Our 
+ EventBarrier had two primary fields: a count of how many waiters the EventBarrier 
+ has and if the EventBarrier is in a signaled state.  The arrive method increases 
+ the number of waiters at the EventBarrier and checks to see if the EventBarrier 
+ "gate" is open.  If it is, it immediately returns and if it isn't, then it waits 
+ and sleeps until the gate is opened.  The gate is opened by the raise method.  
+ The raise method checks to see if the there are waiters at the gate, and if there 
+ are, it sets the signaled state variable to true and wakes the waiters using 
+ notifyAll().  It then waits until all the waiters have gone through the gate.  
+ The waiters let the raise method know that they have gone through the gate using 
+ the complete method that subtracts 1 from the current number of waiters.  Once 
+ all are through, the gate is notified and can handle the next event.  We also 
+ created Producer and Consumer classes to test the functionality of our 
+ EventBarrier in the EventBarrierTestMain class.
+
+ The primary classes that we implemented to simulate the Elevator include 
+ Building, Elevator, and Rider using the given AbstractBuilding and Abstract 
+ EventBarrier classes.  These three classes interact in order to simulate 
+ a functioning Elevator in a Building.  Using our Parser object instantiated in 
+ our Main class, we are able to instantiate the appropriate number of elevators 
+ and riders, associate each of the elevator and riders with an exclusive thread, 
+ and then begin the program by calling start() on each of the threads.  Both 
+ Elevators and Riders are runnable classes in order to make them run in separate 
+ threads, and Building is a normal class that facilitates interaction between the 
+ Riders and the Elevators.
+
+ We created three different arrays of EventBarriers in order to get our Elevator 
+ simulator functioning.  UpCalls and downCalls (both fields in the Building and 
+ Elevator classes) each hold an EventBarrier for each floor in the building and 
+ allow Riders to use the EventBarriers to request an Elevator to go up or down 
+ from a particular floor.  In this case, the Riders are the waiters, the Building 
+ is the gatekeeper, and the event is finding an elevator to visit the requested 
+ floor going in the appropriate direction.  We also have a two dimensional array 
+ of EventBarriers called elevatorCalls that has an EventBarrier for each elevator 
+ in the Building for each floor in the Building.  These EventBarriers are used for 
+ when the Rider is in the Elevator (they have arrived at the event barrier when 
+ they enter the elevator) and are waiting for the elevator to get to the 
+ appropriate floor.  When the elevator gets to the correct floor, the "gate" 
+ raises and the Rider can exit.
+
+ When a Rider requests an elevator (using CallUp or CallDown on a certain floor), 
+ arrive is called on the appropriate EventBarrier in the upCalls or downCalls 
+ array.  When this is called, the number of waiters for the associated 
+ EventBarrier increases.  Concurrently, the instantiated Elevators are either 
+ moving up or down and searching each floor to see if the number of waiters at 
+ that floor are greater than 0 or if that is one of the floors that a person in 
+ the Elevator has requested.  If either are true, the Elevator then "opens" its 
+ doors by calling raise on the EventBarrier associated with the floor (for Riders 
+ entering) and with the elevator (for Riders leaving, accessed in the 
+ elevatorCalls array).  When a Rider in the elevator wants to go to a certain 
+ floor, they call RequestFloor in the Elevator Class, which calls arrive of the 
+ EventBarrier associate with the elevator and the floor that the Rider wants to go 
+ to.  The Elevator raises that barrier in the same fashion as before using the 
+ VisitFloor() method.  All of the arrive calls are closed in the Enter and Exit 
+ methods when Riders enter or exit the Elevator.
+
+ Capacity constraints are handled in the Enter method of Elevator and the run 
+ method of Rider.  The Elevator class has variables that keep track of both the 
+ number of Riders in the Elevator and the maximum occupancy of the Elevator.  
+ Initially, the Rider requests an Elevator and then attempts to enter the 
+ Elevator using the Enter method of the Elevator class.  If the Elevator is at 
+ capacity, that Enter call will return false and will force the Rider to request 
+ another Elevator.  Otherwise, it will enter the elevator and continue.
+
+ Multiple Elevators are supported in the Building class.  It houses a list 
+ containing all of the Elevators instantiated by the input file and has 
+ complicated findElevator function that picks the optimal elevator for responding 
+ to a Riders request.  Then the previously mentioned process is performed on the 
+ EventBarrier in the two dimensional array elevatorCalls by using the floor 
+ requested and the id of the elevator.
+
 /************************
  * Feedback on the lab
  ************************/
@@ -61,6 +141,10 @@
  * improve the lab.
  * */
 
+ Overall I think this lab is relatively straight forward.  It just takes a little 
+ bit of time for students to realize a few things about it (having multiple sets 
+ of EventBarriers for up calls, down calls, and exiting).
+
 /************************
  * References
  ************************/
@@ -68,3 +152,5 @@
 /*
  * List of collaborators involved including any online references/citations.
  * */
+
+ Stackoverflow
