@@ -106,16 +106,17 @@
  array.  When this is called, the number of waiters for the associated 
  EventBarrier increases.  Concurrently, the instantiated Elevators are either 
  moving up or down and searching each floor to see if the number of waiters at 
- that floor are greater than 0 or if that is one of the floors that a person in 
- the Elevator has requested.  If either are true, the Elevator then "opens" its 
- doors by calling raise on the EventBarrier associated with the floor (for Riders 
- entering) and with the elevator (for Riders leaving, accessed in the 
- elevatorCalls array).  When a Rider in the elevator wants to go to a certain 
- floor, they call RequestFloor in the Elevator Class, which calls arrive of the 
- EventBarrier associate with the elevator and the floor that the Rider wants to go 
- to.  The Elevator raises that barrier in the same fashion as before using the 
- VisitFloor() method.  All of the arrive calls are closed in the Enter and Exit 
- methods when Riders enter or exit the Elevator.
+ that floor are greater than 0 without an already opened elevator or if that 
+ is one of the floors that a person in the Elevator has requested.  If either are
+ true, the Elevator then "opens" its doors by calling raise on the EventBarrier
+ associated with the floor (for Riders entering) and with the elevator (for 
+ Riders leaving, accessed in the elevatorCalls array).  When a Rider in the 
+ elevator wants to go to a certain floor, they call RequestFloor in the Elevator 
+ Class, which calls arrive of the EventBarrier associated with the elevator and
+ the floor that the Rider wants to go to.  The Elevator raises that barrier in 
+ the same fashion as before using the VisitFloor() method.  All of the arrive
+ calls are closed in the Enter and Exit methods when Riders enter or exit the
+ Elevator.
 
  Capacity constraints are handled in the Enter method of Elevator and the run 
  method of Rider.  The Elevator class has variables that keep track of both the 
@@ -127,10 +128,10 @@
 
  Multiple Elevators are supported in the Building class.  It houses a list 
  containing all of the Elevators instantiated by the input file and has 
- complicated findElevator function that picks the optimal elevator for responding 
- to a Riders request.  Then the previously mentioned process is performed on the 
- EventBarrier in the two dimensional array elevatorCalls by using the floor 
- requested and the id of the elevator.
+ complicated findElevator function that locates the elevator which will first
+ respond to the request. Then the previously mentioned process is performed
+ on the EventBarrier in the two dimensional array elevatorCalls by using
+ the floor requested and the id of the elevator.
 
 /************************
  * Feedback on the lab
