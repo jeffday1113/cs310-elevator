@@ -30,9 +30,11 @@ public class EventBarrier extends AbstractEventBarrier{
 	}
 	@Override
 	public synchronized void raise() {
-		//System.out.println("called raise");
-		isInSignaledState = true;	
-		notifyAll();
+		System.out.println("called raise " + count);
+		if(count > 0){
+			isInSignaledState = true;
+			notifyAll();
+		}
 		while(isInSignaledState){ //loop before leaping
 			try {
 				this.wait();
@@ -42,6 +44,7 @@ public class EventBarrier extends AbstractEventBarrier{
 			isInSignaledState = count>0;
 		}
 		notifyAll();
+		System.out.println("returned from raise");
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package lab3;
 
-public class Rider extends Thread{
+public class Rider implements Runnable{
 	/*This should be a thread for each rider who calls the elevator
 	 * 
 	 */
@@ -8,6 +8,7 @@ public class Rider extends Thread{
 	public int originFloor;
 	private Building myBuilding;
 	public int id;
+	
 	public Rider(int ID, int requested, int current, Building building){
 		myBuilding = building;
 		requestedFloor = requested;
@@ -19,24 +20,26 @@ public class Rider extends Thread{
 		
 		AbstractElevator myElevator;
 		if(requestedFloor > originFloor) { 
-			Main.writer.println(("R" + id +
-					" pushes D" + originFloor));
-			System.out.println("about to call elevator");
+		//	Main.writer.println(("R" + id +
+		//			" pushes D" + originFloor));
+			System.out.println("call elevator going up from " + originFloor + " to " + requestedFloor);
 			myElevator = myBuilding.CallUp(originFloor);
 			//we never get an elevator back
-			System.out.println("return an up elevator");
 
 		} else {
-			Main.writer.write("R" + id +
-					" pushes D" + originFloor);
+			//Main.writer.write("R" + id +
+		//			" pushes D" + originFloor);
+			System.out.println("call elevator going down from " + originFloor + " to " + requestedFloor);
 			myElevator = myBuilding.CallDown(originFloor);
-			System.out.println("return a down elevator");
 		}
 
 		myElevator.Enter();
 		myElevator.RequestFloor(requestedFloor);
 		myElevator.Exit();
+		myBuilding.addFinishedRider();
 
 	}
+	
+	
 
 }

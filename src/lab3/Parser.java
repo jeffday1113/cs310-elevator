@@ -58,13 +58,16 @@ public class Parser {
 			Rider r = new Rider(riderID, endFloor, startFloor, sb);
 			myRiders.add(r);
 		}
+		for(int i = 0; i < elevators; i++) {
+			Thread p = new Thread(myElevators.get(i));
+			 p.start();
+		}
 		for(int i = 0; i<myRiders.size(); i++){
-			myRiders.get(i).start();
+			Thread p = new Thread(myRiders.get(i));
+			p.start();
 		}
 		
-		for(int i = 0; i < elevators; i++) {
-			 myElevators.get(i).Enter();
-		}
+		
 	}
 
 }
