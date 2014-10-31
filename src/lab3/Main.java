@@ -38,11 +38,12 @@ public class Main {
 	}*/
 	public static void main(String args[]){
 		int floors = 2;
-		int elevators = 1;
-		int riders = 1;
+		int elevators = 2;
 		Building b = new Building(floors, elevators);
-		Elevator e = new Elevator(floors, 0, 5);
-		b.setElevator(e);
+		Elevator e = new Elevator(floors, 0, 1);
+		Elevator f = new Elevator(floors, 1, 1);
+		b.addElevator(e);
+		b.addElevator(f);
 		
 		EventBarrier[] upCalls; 
 		EventBarrier[] downCalls; 
@@ -61,12 +62,18 @@ public class Main {
 		}
 		b.setEventBarriers(upCalls, downCalls, elevatorCalls);
 		e.setEventBarriers(upCalls, downCalls, elevatorCalls);
+		f.setEventBarriers(upCalls, downCalls, elevatorCalls);
 		
-		Rider r = new Rider(1, 1, 0, b);
+		Rider r = new Rider(1, 0, 1, b);
+		Rider rr = new Rider(2, 1, 0, b);
 		Thread hi = new Thread(e);
 		hi.start();
+		Thread hii = new Thread(f);
+		hii.start();
 		Thread hi2 = new Thread(r);
 		hi2.start();
+		Thread hi3 = new Thread(rr);
+		hi3.start();
 	}
 	
 }

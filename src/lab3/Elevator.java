@@ -14,6 +14,8 @@ public class Elevator extends AbstractElevator implements Runnable {
 	private EventBarrier currEntryBarrier;
 	private int elevatorID;
 	private int floorGoingTo;
+	private int currentNumRiders;
+	private int capacity;
 
 
 
@@ -28,10 +30,12 @@ public class Elevator extends AbstractElevator implements Runnable {
 		}
 		elevatorID = elevatorId;
 		numFloor = numFloors;
+		capacity = maxOccupancyThreshold;
 		moreRiders = true;
 		current = 0;
 		goingUp = true;
 		doorOpen = false;
+		currentNumRiders=0;
 	}
 
 	@Override
@@ -40,6 +44,7 @@ public class Elevator extends AbstractElevator implements Runnable {
 		doorOpen = true;
 		//Main.writer.println("E" + "?" + "on F" +"?"+ "opens");
 		currEntryBarrier.raise();
+		System.out.println(elevatorID + " " + current);
 		elevatorCalls[elevatorID][current].raise();
 	}
 
@@ -55,13 +60,13 @@ public class Elevator extends AbstractElevator implements Runnable {
 	public void VisitFloor(int floor) {
 		if(goingUp){
 			System.out.println("visiting floor " + floor );
-		//	Main.writer.println("E " +"?" + "moves up to floor" + (floor));
+			//	Main.writer.println("E " +"?" + "moves up to floor" + (floor));
 			currEntryBarrier = upCalls[current];
 		}
 		else{
 			System.out.println("visiting floor " + floor );
 			currEntryBarrier = downCalls[current];
-		//	Main.writer.println("E " +"?" + "moves down to floor" + (floor));
+			//	Main.writer.println("E " +"?" + "moves down to floor" + (floor));
 		}
 		current = floor;
 		if(currEntryBarrier.waiters() > 0 || current == floorGoingTo){
@@ -72,14 +77,21 @@ public class Elevator extends AbstractElevator implements Runnable {
 
 	@Override
 	public synchronized boolean Enter() {
-		System.out.println("entering");
-		currEntryBarrier.complete();
-		return true;
-		
+		if (currentNumRiders==capacity){
+			currEntryBarrier.complete();
+			return false;
+		}
+		else{
+			System.out.println("entering");
+			currentNumRiders++;
+			currEntryBarrier.complete();
+			return true;
+		}
 	}
 
 	@Override
 	public void Exit() {	
+		currentNumRiders--;
 		elevatorCalls[elevatorID][current].complete();
 	}
 
@@ -109,9 +121,9 @@ public class Elevator extends AbstractElevator implements Runnable {
 			System.out.println("elevator on floor " + current);
 			VisitFloor(current);
 		}
-		
+
 	}
-	
+
 	public void setEventBarriers(EventBarrier[] a, EventBarrier[] b, EventBarrier[][] c){
 		upCalls = a;
 		downCalls = b;
@@ -122,4 +134,12 @@ public class Elevator extends AbstractElevator implements Runnable {
 		moreRiders = false;
 	}
 	
+	public int getCurrentFloor(){
+		return current;
+	}
+	
+	public boolean isGoingUp(){
+		return goingUp;
+	}
+
 }
